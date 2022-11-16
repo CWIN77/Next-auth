@@ -15,9 +15,9 @@ export default NextAuth({
     // verifyRequest: '/auth/verify-request',
     // newUser: '/auth/new-user'
   },
-  // jwt: {
-  //   encryption: true,
-  // },
+  jwt: {
+    encryption: true,
+  },
   secret: process.env.JWT_SECRET,
   callbacks: {
     // async jwt(token, account) {
@@ -26,6 +26,14 @@ export default NextAuth({
     //   }
     //   return token;
     // },
+    async jwt({ token, account }) {
+      if (account) {
+        token.accessToken = account.access_token
+      }
+      console.log(token)
+      
+      return token
+    },
     redirect: async (url, _baseUrl) => {
       return Promise.resolve('/login');
     },
